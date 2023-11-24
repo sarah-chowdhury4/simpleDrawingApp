@@ -1,0 +1,79 @@
+{% extends "base.html"%}
+
+{% block title%} Welcome! {% endblock %}
+
+{% block script %}
+<!-- Bootstrap Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+<!-- Load the Paper.js library -->
+<script type="text/javascript" src="{{ url_for('static', filename='javascript/paper-full.js')}}"></script>
+
+<!-- Script for Canvas -->
+<script type="text/paperscript" src="{{ url_for('static', filename='javascript/paperscript.js')}}" canvas="myCanvas"></script>
+<script>
+  const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+  const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+</script>
+
+<script>
+  let canvas = document.getElementById('myCanvas');
+let ctx = canvas.getContext('2d');
+
+// Canvas code goes here 
+// ...
+
+document.getElementById('save').addEventListener('click', function(e) {
+    // Convert our canvas to a data URL
+    let canvasUrl = canvas.toDataURL();
+    // Create an anchor, and set the href value to our data URL
+    const createEl = document.createElement('a');
+    createEl.href = canvasUrl;
+
+    // This is the name of our downloaded file
+    createEl.download = "canvas";
+
+    // Click the download button, causing a download, and then remove it
+    createEl.click();
+    createEl.remove();
+});
+</script>
+{% endblock %}
+
+
+{% block content %}
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Simple Drawing App</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Size
+          </a>
+          <ul class="dropdown-menu">
+            <li><label for="stroke-width" class="form-label" id="size"></label></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><input type="range" class="form-range" id="stroke-width" min="0" max="50"></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <div class="container" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="Color" data-bs-trigger="hover focus" >
+            <input type="color" id="colorPicker">
+          </div>
+        </li> 
+        <li class="nav-item">
+          <button type="button" class="btn btn-danger" id="save">Save</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<canvas  resize id="myCanvas"></canvas>
+{% endblock %}
+
